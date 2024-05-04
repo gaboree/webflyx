@@ -1,32 +1,14 @@
-class Book:
-    def __init__(self, title, author):
-        self.title = title
-        self.author = author
-    
-    def print_book(self):
-        print(f"{self.title} written by {self.author}")
+class Employee:
+    company_name = "Age of Dragons, Inc."
+    total_employees = 0
 
-class Library:
-    def __init__(self, name):
-        self.name = name
-        self.books = []
+    def __init__(self, first_name, last_name, id, position, salary):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.id = id
+        self.position = position
+        self.salary = salary
+        Employee.total_employees += 1
 
-    def add_book(self, book):
-        self.books.append(book)
-
-    def remove_book(self, book):
-        for i in self.books:
-            if i.author == book.author and i.title == book.title:                
-                self.books.remove(i)
-    
-    def search_books(self, search_string):
-        result = []
-        target = search_string.lower()
-        for i in self.books:
-            if target in i.author.lower() or target in i.title.lower():
-                result.append(i)
-        return result
-
-    def print_library(self):
-        for i in self.books:
-            print(f"{i.author} {i.title}")
+    def get_name(self):
+        return self.first_name + " " + self.last_name

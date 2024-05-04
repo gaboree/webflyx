@@ -1,85 +1,100 @@
 from main import *
 
 run_cases = [
-    (
-        "John's Library",
-        ["The Catcher in the Rye", "To Kill a Mockingbird", "1984"],
-        ["J.D. Salinger", "Harper Lee", "George Orwell"],
-        Book("1984", "George Orwell"),
-        "kill",
-        ["To Kill a Mockingbird"],
-    )
+    [
+        (
+            "John",
+            "Carmack",
+            1,
+            "Senior Developer",
+            100000,
+        ),
+        (
+            "Shigeru",
+            "Miyamoto",
+            2,
+            "Staff Developer",
+            120000,
+        ),
+        (
+            "Ken",
+            "Levine",
+            1,
+            "Manager",
+            170000,
+        ),
+        (
+            "Will",
+            "Wright",
+            2,
+            "Game Developer",
+            125000,
+        ),
+    ]
 ]
 
 submit_cases = run_cases + [
-    (
-        "Lane's Library",
-        [
-            "The Great Gatsby",
-            "Pride and Prejudice",
-            "The Lord of the Rings",
-            "Great Expectations",
-            "To Kill a Mockingbird",
-        ],
-        [
-            "F. Scott Fitzgerald",
-            "Jane Austen",
-            "J.R.R. Tolkien",
-            "Charles Dickens",
-            "Harper Lee",
-        ],
-        Book("The Great Gatsby", "F. Scott Fitzgerald"),
-        "great",
-        ["Great Expectations"],
-    ),
+    [
+        (
+            "Sid",
+            "Meier",
+            1,
+            "Junior Developer",
+            160000,
+        ),
+        (
+            "Gabe",
+            "Newell",
+            2,
+            "Staff Developer",
+            130000,
+        ),
+        (
+            "Sarah",
+            "Schulte",
+            3,
+            "Principal Bash Developer",
+            10000000,
+        ),
+    ]
 ]
 
+expected_total_employees = 0
 
-def test(
-    library_name,
-    book_titles,
-    book_authors,
-    book_to_remove,
-    search_query,
-    expected_search_results,
-):
-    print("---------------------------------")
-    try:
-        print(f"Testing Library: {library_name}")
 
-        library = Library(library_name)
-        for title, author in zip(book_titles, book_authors):
-            library.add_book(Book(title, author))
-            print(f"Adding book {title} by {author}")
-
-        print(f"Removing book {book_to_remove.title} by {book_to_remove.author}")
-        library.remove_book(book_to_remove)
-
-        print(f"Searching for '{search_query}'")
-        search_results = library.search_books(search_query)
-        results_titles = [book.title for book in search_results]
-        print(f"Expected: {expected_search_results}")
-        print(f"Actual: {results_titles}")
-
-        if results_titles != expected_search_results:
-            print("Fail")
+def test(employees):
+    print("=================================")
+    for employee in employees:
+        global expected_total_employees
+        expected_total_employees += 1
+        print(
+            f"Employee({employee[0]}, {employee[1]}, {employee[2]}, {employee[3]}, {employee[4]})"
+        )
+        employee = Employee(*employee)
+        expected_name = f"{employee.first_name} {employee.last_name}"
+        print(f"Expected name: {expected_name}")
+        print(f"Actual name: {employee.get_name()}")
+        if expected_name != employee.get_name():
             return False
 
-        print("Pass")
-        return True
-    except Exception as e:
-        print(f"Error: {e}")
-        return False
+        print(f"Expected employees: {expected_total_employees}")
+        print(f"Actual employees: {Employee.total_employees}")
+        if expected_total_employees != Employee.total_employees:
+            return False
+        print("---------------------------------")
+    return True
 
 
 def main():
     passed, failed = 0, 0
     for test_case in test_cases:
-        correct = test(*test_case)
+        correct = test(test_case)
         if correct:
             passed += 1
+            print("Pass")
         else:
             failed += 1
+            print("Fail")
 
     if failed == 0:
         print("============= PASS ==============")
@@ -88,8 +103,9 @@ def main():
     print(f"{passed} passed, {failed} failed")
 
 
-test_cases = submit_cases
 if "__RUN__" in globals():
     test_cases = run_cases
+else:
+    test_cases = submit_cases
 
 main()
