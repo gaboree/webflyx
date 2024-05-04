@@ -1,61 +1,51 @@
 from main import *
 
 run_cases = [
+    ((0, 0, 5, 3), ["sprint_right"], (10, 0)),
     (
-        "Zatanna",
-        ["Maths", "Lore", "History"],
-        [85, 92, 76],
-        {"Maths": "B", "Lore": "A", "History": "C"},
+        (0, 0, 20, 3),
+        [
+            "sprint_left",
+            "sprint_left",
+            "sprint_left",
+        ],
+        (-120, 0),
     ),
-    (
-        "Prospero",
-        ["Alchemy", "Politics"],
-        [90, 88],
-        {"Alchemy": "A", "Politics": "B"},
-    ),
+    ((1, 1, 3, 1), ["sprint_down", "sprint_right"], "not enough stamina to sprint"),
 ]
 
 submit_cases = run_cases + [
+    ((3, 5, 5, 1), ["sprint_up"], (3, 15)),
+    ((2, 15, 6, 2), ["sprint_down"], (2, 3)),
     (
-        "Glinda",
-        ["Elementalism", "Artificery", "History"],
-        [80, 78, 90],
-        {"Elementalism": "B", "Artificery": "C", "History": "A"},
-    ),
-    (
-        "Willow",
-        ["Treasure Hunting", "Artificery"],
-        [70, 65],
-        {"Treasure Hunting": "C", "Artificery": "D"},
-    ),
-    (
-        "Rincewind",
-        ["Necromancy"],
-        [100],
-        {"Necromancy": "A"},
+        (1, 1, 5, 2),
+        ["sprint_left", "sprint_up", "sprint_down"],
+        "not enough stamina to sprint",
     ),
 ]
 
 
-def test(name, courses, scores, expected_grades):
+def test(human_args, methods, expected_output):
     print("---------------------------------")
-    student = Student(name)
-    for i in range(len(courses)):
-        student.add_course(courses[i], scores[i])
-    actual_grades = student.get_courses()
-
-    print(f"Inputs for {name}:")
-    print(f" * Courses: {courses}")
-    print(f" * Scores: {scores}")
-    print(f" * Expected Grades: {expected_grades}")
-    print(f" * Actual Grades: {actual_grades}")
-
-    if actual_grades == expected_grades:
+    print(f"Inputs:")
+    human = Human(*human_args)
+    print(
+        f" * human: x pos: {human._Human__pos_x}, y pos: {human._Human__pos_y}, speed: {human._Human__speed}, stamina: {human._Human__stamina}"
+    )
+    print(f" * methods: {methods}")
+    print(f"Expected: {expected_output}")
+    try:
+        for method in methods:
+            getattr(human, method)()
+        result = human.get_position()
+    except Exception as e:
+        result = str(e)
+    print(f"Actual: {result}")
+    if result == expected_output:
         print("Pass")
         return True
-    else:
-        print("Fail")
-        return False
+    print("Fail")
+    return False
 
 
 def main():

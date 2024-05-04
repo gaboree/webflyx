@@ -1,22 +1,61 @@
-class Student:
-    def __init__(self, name):
-        self.name = name
-        self.__courses = {}
+class Human:
+    def sprint_right(self):
+        self.__raise_if_cannot_sprint()
+        self.__use_sprint_stamina()
+        self.move_right()
+        self.move_right()
+            
 
-    def calculate_letter_grade(self, score):
-        if score >= 90:
-            return "A"
-        elif 89 >= score >= 80:
-            return "B"
-        elif 79 >= score >= 70:
-            return "C"
-        elif 69 >= score >= 60:
-            return "D"
-        else:
-            return "F"
+    def sprint_left(self):
+        self.__raise_if_cannot_sprint()
+        self.__use_sprint_stamina()
+        self.move_left()
+        self.move_left()
 
-    def add_course(self, course_name, score):
-        self.__courses[course_name] = self.calculate_letter_grade(score)
+    def sprint_up(self):
+        self.__raise_if_cannot_sprint()
+        self.__use_sprint_stamina()
+        self.move_up()
+        self.move_up()
 
-    def get_courses(self):
-        return self.__courses
+    def sprint_down(self):
+        self.__raise_if_cannot_sprint()
+        self.__use_sprint_stamina()
+        self.move_down()
+        self.move_down()
+
+    def __raise_if_cannot_sprint(self):
+        if self.__stamina <= 0:
+            raise Exception("not enough stamina to sprint")
+
+    def __use_sprint_stamina(self):
+        self.__stamina -= 1
+    
+    def print_human(self):
+        print(f"pos x: {self.__pos_x}")
+        print(f"pos y: {self.__pos_y}")
+        print(f"speed: {self.__speed}")
+        print(f"stamina: {self.__stamina}")
+
+    # don't touch below this line
+
+    def move_right(self):
+        self.__pos_x += self.__speed
+
+    def move_left(self):
+        self.__pos_x -= self.__speed
+
+    def move_up(self):
+        self.__pos_y += self.__speed
+
+    def move_down(self):
+        self.__pos_y -= self.__speed
+
+    def get_position(self):
+        return self.__pos_x, self.__pos_y
+
+    def __init__(self, pos_x, pos_y, speed, stamina):
+        self.__pos_x = pos_x
+        self.__pos_y = pos_y
+        self.__speed = speed
+        self.__stamina = stamina
