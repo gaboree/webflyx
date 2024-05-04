@@ -1,36 +1,46 @@
-import math
+import random
 
-class Calculator:
+
+class DeckOfCards:
+    SUITS = ["Hearts", "Diamonds", "Clubs", "Spades"]
+    RANKS = [
+        "Ace",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "Jack",
+        "Queen",
+        "King",
+    ]
+
     def __init__(self):
-        self.__result = 0
+        self.__cards = []
+        self.create_deck()
 
-    def add(self, a):
-        self.__result += a
+    def create_deck(self):
+        for suit in self.SUITS:
+            for rank in self.RANKS:            
+                self.__cards.append((rank, suit))
 
-    def subtract(self, a):
-        self.__result -= a
+    def shuffle_deck(self):
+        random.shuffle(self.__cards)
 
-    def multiply(self, a):
-        self.__result *= a
+    def deal_card(self):
+        if len(self.__cards) != 0:
+            return self.__cards.pop()
+        return None
 
-    def divide(self, a):
-        if a == 0:
-            raise Exception("Cannot divide by zero")
-        self.__result /= a
+    def print_deck(self):
+        for card in self.__cards:
+            print(card[0],card[1])
 
-    def modulo(self, a):
-        if a == 0:
-            raise Exception("Cannot divide by zero")
-        self.__result = self.__result % a
+    # don't touch below this line
 
-    def power(self, a):
-        self.__result **= a
-
-    def square_root(self):
-        self.__result = math.sqrt(self.__result)
-
-    def clear(self):
-        self.__result = 0
-
-    def get_result(self):
-        return self.__result
+    def __str__(self):
+        return f"The deck has {len(self.__cards)} cards"
