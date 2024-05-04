@@ -1,14 +1,17 @@
-class Employee:
-    company_name = "Age of Dragons, Inc."
-    total_employees = 0
+fireball_damage = 500
+potion_mana = 100
 
-    def __init__(self, first_name, last_name, id, position, salary):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.id = id
-        self.position = position
-        self.salary = salary
-        Employee.total_employees += 1
 
-    def get_name(self):
-        return self.first_name + " " + self.last_name
+class Wizard:
+    def __init__(self, name, stamina, intelligence):
+        self.name = name
+        self.__stamina = stamina
+        self.__intelligence = intelligence
+        self.mana = self.__intelligence * 10
+        self.health = self.__stamina * 100
+
+    def get_fireballed(self):
+        self.health -= fireball_damage
+
+    def drink_mana_potion(self):
+        self.mana += potion_mana
