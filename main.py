@@ -1,61 +1,36 @@
-class Human:
-    def sprint_right(self):
-        self.__raise_if_cannot_sprint()
-        self.__use_sprint_stamina()
-        self.move_right()
-        self.move_right()
-            
+import math
 
-    def sprint_left(self):
-        self.__raise_if_cannot_sprint()
-        self.__use_sprint_stamina()
-        self.move_left()
-        self.move_left()
+class Calculator:
+    def __init__(self):
+        self.__result = 0
 
-    def sprint_up(self):
-        self.__raise_if_cannot_sprint()
-        self.__use_sprint_stamina()
-        self.move_up()
-        self.move_up()
+    def add(self, a):
+        self.__result += a
 
-    def sprint_down(self):
-        self.__raise_if_cannot_sprint()
-        self.__use_sprint_stamina()
-        self.move_down()
-        self.move_down()
+    def subtract(self, a):
+        self.__result -= a
 
-    def __raise_if_cannot_sprint(self):
-        if self.__stamina <= 0:
-            raise Exception("not enough stamina to sprint")
+    def multiply(self, a):
+        self.__result *= a
 
-    def __use_sprint_stamina(self):
-        self.__stamina -= 1
-    
-    def print_human(self):
-        print(f"pos x: {self.__pos_x}")
-        print(f"pos y: {self.__pos_y}")
-        print(f"speed: {self.__speed}")
-        print(f"stamina: {self.__stamina}")
+    def divide(self, a):
+        if a == 0:
+            raise Exception("Cannot divide by zero")
+        self.__result /= a
 
-    # don't touch below this line
+    def modulo(self, a):
+        if a == 0:
+            raise Exception("Cannot divide by zero")
+        self.__result = self.__result % a
 
-    def move_right(self):
-        self.__pos_x += self.__speed
+    def power(self, a):
+        self.__result **= a
 
-    def move_left(self):
-        self.__pos_x -= self.__speed
+    def square_root(self):
+        self.__result = math.sqrt(self.__result)
 
-    def move_up(self):
-        self.__pos_y += self.__speed
+    def clear(self):
+        self.__result = 0
 
-    def move_down(self):
-        self.__pos_y -= self.__speed
-
-    def get_position(self):
-        return self.__pos_x, self.__pos_y
-
-    def __init__(self, pos_x, pos_y, speed, stamina):
-        self.__pos_x = pos_x
-        self.__pos_y = pos_y
-        self.__speed = speed
-        self.__stamina = stamina
+    def get_result(self):
+        return self.__result
