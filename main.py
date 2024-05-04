@@ -1,11 +1,28 @@
-def fight_soldiers(soldier_one, soldier_two):
-    soldier_one_dps = get_soldier_dps(soldier_one)
-    soldier_two_dps = get_soldier_dps(soldier_two)
-    if soldier_one_dps > soldier_two_dps:
-        return "soldier 1 wins"
-    if soldier_two_dps > soldier_one_dps:
-        return "soldier 2 wins"
-    return "both soldiers die"
+class Archer:
+    def __init__(self, name, health, num_arrows):
+        self.name = name
+        self.health = health
+        self.num_arrows = num_arrows
 
-def get_soldier_dps(sold_attack):
-    return sold_attack["damage"]*sold_attack["attacks_per_second"]
+    def get_shot(self):
+        if self.health > 1:
+            self.health -= 1
+        else:
+            self.health -= 1
+            raise Exception(f"{self.name} is dead")
+
+    def shoot(self, target):
+        if self.num_arrows > 0:
+            self.num_arrows -=1
+            print(f"{self.name} shoots {target.name}")
+            target.get_shot()
+        else:
+            raise Exception(f"{self.name} can't shoot")
+
+    # don't touch below this line
+
+    def get_status(self):
+        return self.name, self.health, self.num_arrows
+
+    def print_status(self):
+        print(f"{self.name} has {self.health} health and {self.num_arrows} arrows")
