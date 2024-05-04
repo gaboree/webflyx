@@ -1,36 +1,88 @@
 from main import *
 
 run_cases = [
-    ("Merlin", 10, 10, 500, 200),
-    ("Morgana", 20, 5, 1500, 150),
+    ("1234567890", 100.0, 50.0, 75.0, 75.0),
+    ("0987654321", 500.0, 100.0, 200.0, 400.0),
 ]
 
 submit_cases = run_cases + [
-    ("Arthur", 3, 3, -200, 130),
+    ("1234567890", 100.0, 50.0, 200.0, 150.0, None, "Insufficient funds"),
+    ("0987654321", 500.0, 500.0, 500.0, 500.0),
+    ("1234567890", 300.0, -10.0, 20.0, 280.0, "Cannot deposit zero or negative funds"),
+    ("0987654321", 200.0, 0.0, 10.0, 190.0, "Cannot deposit zero or negative funds"),
+    ("1234567890", -20.0, 10.0, 10.0, -10.0, None, "Insufficient funds"),
+    (
+        "0987654321",
+        100.0,
+        10.0,
+        -10.0,
+        110.0,
+        None,
+        "Cannot withdraw zero or negative funds",
+    ),
+    (
+        "1234567890",
+        900.0,
+        100.0,
+        0.0,
+        1000.0,
+        None,
+        "Cannot withdraw zero or negative funds",
+    ),
 ]
 
 
 def test(
-    wizard_name,
-    wizard_stamina,
-    wizard_intelligence,
-    expected_health_after,
-    expected_mana_after,
+    account_number,
+    initial_balance,
+    deposit_amount,
+    withdraw_amount,
+    expected_balance,
+    deposit_err=None,
+    withdraw_err=None,
 ):
     print("---------------------------------")
-    print(f"Wizard({wizard_name}, {wizard_stamina}, {wizard_intelligence})")
-    wizard = Wizard(wizard_name, wizard_stamina, wizard_intelligence)
-    wizard.get_fireballed()
-    wizard.drink_mana_potion()
-    print(f"Expected health after: {expected_health_after}")
-    print(f"Actual health after: {wizard.health}")
-    print(f"Expected mana after: {expected_mana_after}")
-    print(f"Actual mana after: {wizard.mana}")
-    if wizard.health != expected_health_after:
+    try:
+        print(
+            f"Inputs: account_number: {account_number}, initial_balance: {initial_balance:.2f}, deposit_amount: {deposit_amount:.2f}, withdraw_amount: {withdraw_amount:.2f}"
+        )
+        account = BankAccount(account_number, initial_balance)
+        try:
+            account.deposit(deposit_amount)
+            if deposit_err:
+                print(f'Expected error "{deposit_err}"')
+                print(f"Actual output: No error was raised")
+                print("Fail")
+                return False
+        except ValueError as e:
+            print(f'Expected error "{deposit_err}"')
+            print(f'Actual error "{e}"')
+            if str(e) != deposit_err:
+                print("Fail")
+                return False
+        try:
+            account.withdraw(withdraw_amount)
+            if withdraw_err:
+                print(f'Expected error "{withdraw_err}"')
+                print(f"Actual output: No error was raised")
+                print("Fail")
+                return False
+        except ValueError as e:
+            print(f'Expected error "{withdraw_err}"')
+            print(f'Actual error "{e}"')
+            if str(e) != withdraw_err:
+                print("Fail")
+                return False
+        print(f"Expected balance ${expected_balance:.2f}")
+        print(f"Actual balance ${account.get_balance():.2f}")
+        if account.get_balance() != expected_balance:
+            print("Fail")
+            return False
+        print("Pass")
+        return True
+    except Exception as e:
+        print(f"Fail: {e}")
         return False
-    if wizard.mana != expected_mana_after:
-        return False
-    return True
 
 
 def main():
