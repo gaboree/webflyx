@@ -1,46 +1,36 @@
-import random
+class Human:
+    def __init__(self, name):
+        self.__name = name
+
+    def get_name(self):
+        return self.__name
 
 
-class DeckOfCards:
-    SUITS = ["Hearts", "Diamonds", "Clubs", "Spades"]
-    RANKS = [
-        "Ace",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "Jack",
-        "Queen",
-        "King",
-    ]
+## don't touch above this line
 
-    def __init__(self):
-        self.__cards = []
-        self.create_deck()
 
-    def create_deck(self):
-        for suit in self.SUITS:
-            for rank in self.RANKS:            
-                self.__cards.append((rank, suit))
+class Archer(Human):
+    def __init__(self, name, num_arrows):
+        super().__init__(name)
+        self.__num_arrows = num_arrows
 
-    def shuffle_deck(self):
-        random.shuffle(self.__cards)
+    def get_num_arrows(self):
+        return self.__num_arrows
 
-    def deal_card(self):
-        if len(self.__cards) != 0:
-            return self.__cards.pop()
-        return None
+    def use_arrows(self, num):
+        if self.__num_arrows > 0:
+            self.__num_arrows -= num
+        else:
+            raise Exception("not enough arrows")
 
-    def print_deck(self):
-        for card in self.__cards:
-            print(card[0],card[1])
 
-    # don't touch below this line
+class Crossbowman(Archer):
+    def __init__(self, name, num_arrows):
+        super().__init__(name, num_arrows)
 
-    def __str__(self):
-        return f"The deck has {len(self.__cards)} cards"
+    def triple_shot(self, target):
+        if self.get_num_arrows() >= 3:
+            self.use_arrows(3)
+            return f"{target.get_name()} was shot by 3 crossbow bolts"
+        else:
+            raise Exception("not enough arrows")

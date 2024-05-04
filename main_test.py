@@ -1,124 +1,73 @@
 from main import *
 
 run_cases = [
-    ("shuffle_deck", 3, [("9", "Hearts"), ("Jack", "Clubs"), ("10", "Spades")]),
-    (
-        "deal_card",
-        4,
-        [("King", "Spades"), ("Queen", "Spades"), ("Jack", "Spades"), ("10", "Spades")],
-    ),
-    ("deal_card", 3, [("King", "Spades"), ("Queen", "Spades"), ("Jack", "Spades")]),
+    ("Will the Archer", 1, "Darren the Crossbowman", 4, None, 1),
+    ("Elena the Archer", 5, "Connor the Crossbowman", 3, None, 0),
+    ("Lara the Archer", 3, "Marcus the Crossbowman", 2, "not enough arrows", -1),
+    ("Jake the Archer", 0, "Victor the Crossbowman", 3, None, 0),
 ]
 
 submit_cases = run_cases + [
-    ("shuffle_deck", 3, [("9", "Hearts"), ("Jack", "Clubs"), ("10", "Spades")]),
-    (
-        "deal_card",
-        4,
-        [("King", "Spades"), ("Queen", "Spades"), ("Jack", "Spades"), ("10", "Spades")],
-    ),
-    ("deal_card", 3, [("King", "Spades"), ("Queen", "Spades"), ("Jack", "Spades")]),
-    ("shuffle_deck", 3, [("9", "Hearts"), ("Jack", "Clubs"), ("10", "Spades")]),
-    ("deal_card", 3, [("King", "Spades"), ("Queen", "Spades"), ("Jack", "Spades")]),
-    (
-        "deal_card",
-        53,
-        [
-            ("King", "Spades"),
-            ("Queen", "Spades"),
-            ("Jack", "Spades"),
-            ("10", "Spades"),
-            ("9", "Spades"),
-            ("8", "Spades"),
-            ("7", "Spades"),
-            ("6", "Spades"),
-            ("5", "Spades"),
-            ("4", "Spades"),
-            ("3", "Spades"),
-            ("2", "Spades"),
-            ("Ace", "Spades"),
-            ("King", "Clubs"),
-            ("Queen", "Clubs"),
-            ("Jack", "Clubs"),
-            ("10", "Clubs"),
-            ("9", "Clubs"),
-            ("8", "Clubs"),
-            ("7", "Clubs"),
-            ("6", "Clubs"),
-            ("5", "Clubs"),
-            ("4", "Clubs"),
-            ("3", "Clubs"),
-            ("2", "Clubs"),
-            ("Ace", "Clubs"),
-            ("King", "Diamonds"),
-            ("Queen", "Diamonds"),
-            ("Jack", "Diamonds"),
-            ("10", "Diamonds"),
-            ("9", "Diamonds"),
-            ("8", "Diamonds"),
-            ("7", "Diamonds"),
-            ("6", "Diamonds"),
-            ("5", "Diamonds"),
-            ("4", "Diamonds"),
-            ("3", "Diamonds"),
-            ("2", "Diamonds"),
-            ("Ace", "Diamonds"),
-            ("King", "Hearts"),
-            ("Queen", "Hearts"),
-            ("Jack", "Hearts"),
-            ("10", "Hearts"),
-            ("9", "Hearts"),
-            ("8", "Hearts"),
-            ("7", "Hearts"),
-            ("6", "Hearts"),
-            ("5", "Hearts"),
-            ("4", "Hearts"),
-            ("3", "Hearts"),
-            ("2", "Hearts"),
-            ("Ace", "Hearts"),
-            None,
-        ],
-    ),
+    ("Sophia the Archer", 7, "Oscar the Crossbowman", 5, None, 2),
+    ("Ryan the Archer", 2, "Emma the Crossbowman", 1, "not enough arrows", None),
+    ("Zoe the Archer", 10, "Lucas the Crossbowman", 8, None, 5),
+    ("Isaac the Archer", 4, "Hannah the Crossbowman", 0, "not enough arrows", None),
 ]
 
 
-def test(action, num_cards, expected):
+def test(
+    archer_name,
+    archer_arrows,
+    crossbowman_name,
+    crossbowman_bolts,
+    expected_exception,
+    expected_remaining_bolts,
+):
     print("---------------------------------")
-    print(f"Testing action: {action}, dealing {num_cards} cards")
-    print(f"Expected Output:")
-    print_cards(expected)
-    deck = DeckOfCards()
-    random.seed(1)
-    result = []
-    print("++++++++++++++++++++++++++++++++++++")
-    #deck.print_deck()
-    if action == "shuffle_deck":
-        print("Shuffling deck...")
-        deck.shuffle_deck()
-        print(f"dealing {num_cards} cards")
-        for _ in range(num_cards):
-            result.append(deck.deal_card())
-
-    elif action == "deal_card":
-        for _ in range(num_cards):
-            result.append(deck.deal_card())
-
-    print(f"Actual Output:")
-    print_cards(result)
-    if result == expected:
-        print("Pass")
-        return True
-    else:
-        print("Fail")
-        return False
-
-
-def print_cards(cards):
-    for card in cards:
-        if card is None:
-            print("* <None>")
+    print(f"Creating an archer named {archer_name} with {archer_arrows} arrows")
+    archer = Archer(archer_name, archer_arrows)
+    print(
+        f"Creating a crossbowman named {crossbowman_name} with {crossbowman_bolts} bolts"
+    )
+    crossbowman = Crossbowman(crossbowman_name, crossbowman_bolts)
+    try:
+        expected_str = f"{archer_name} was shot by 3 crossbow bolts"
+        actual_str = crossbowman.triple_shot(archer)
+        if actual_str != expected_str:
+            print("Expected: " + expected_str)
+            print("Actual: " + actual_str)
+            print("Fail")
+            return False
         else:
-            print(f"* {card[0]} of {card[1]}")
+            print(actual_str)
+        if expected_exception:
+            print(
+                f"Expected exception '{expected_exception}', but no exception occurred"
+            )
+            print("Fail")
+            return False
+        elif crossbowman.get_num_arrows() != expected_remaining_bolts:
+            print(
+                f"Expected remaining arrows: {expected_remaining_bolts}, Actual: {crossbowman.get_num_arrows()}"
+            )
+            print("Fail")
+            return False
+        else:
+            print(
+                f"Expected {expected_remaining_bolts} remaining bolts, Actual: {crossbowman.get_num_arrows()}"
+            )
+            print("Pass")
+            return True
+    except Exception as e:
+        if str(e) == expected_exception:
+            print(f"Expected exception: {expected_exception}")
+            print(f"Caught expected exception: {e}")
+            print("Pass")
+            return True
+        else:
+            print(f"Unexpected exception: {e}")
+            print("Fail")
+            return False
 
 
 def main():
