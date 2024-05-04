@@ -2,110 +2,85 @@ from main import *
 
 run_cases = [
     (
-        Archer("Robin", 2, 2),
-        Archer("Sheriff", 2, 2),
-        1,
-        [("Robin", 1, 1), ("Sheriff", 1, 1)],
-        None,
-    ),
-    (
-        Archer("Friar Tuck", 1, 0),
-        Archer("Prince John", 1, 0),
-        1,
-        [None, None],
-        "Friar Tuck can't shoot",
-    ),
-    (
-        Archer("King Richard", 1, 1),
-        Archer("Prince John", 2, 1),
-        1,
-        [None, None],
-        "King Richard is dead",
-    ),
+        "John's Library",
+        ["The Catcher in the Rye", "To Kill a Mockingbird", "1984"],
+        ["J.D. Salinger", "Harper Lee", "George Orwell"],
+        Book("1984", "George Orwell"),
+        "kill",
+        ["To Kill a Mockingbird"],
+    )
 ]
 
 submit_cases = run_cases + [
     (
-        Archer("Robin", 2, 2),
-        Archer("Sheriff", 3, 1),
-        2,
-        [None, None],
-        "Sheriff can't shoot",
-    ),
-    (
-        Archer("Marian", 3, 2),
-        Archer("Little John", 3, 3),
-        2,
-        [("Marian", 1, 0), ("Little John", 1, 1)],
-        None,
-    ),
-    (
-        Archer("Robin", 2, 2),
-        Archer("Prince John", 2, 1),
-        2,
-        [None, None],
-        "Prince John is dead",
-    ),
-    (
-        Archer("Little John", 4, 3),
-        Archer("Sheriff", 3, 2),
-        3,
-        [None, None],
-        "Sheriff is dead",
+        "Lane's Library",
+        [
+            "The Great Gatsby",
+            "Pride and Prejudice",
+            "The Lord of the Rings",
+            "Great Expectations",
+            "To Kill a Mockingbird",
+        ],
+        [
+            "F. Scott Fitzgerald",
+            "Jane Austen",
+            "J.R.R. Tolkien",
+            "Charles Dickens",
+            "Harper Lee",
+        ],
+        Book("The Great Gatsby", "F. Scott Fitzgerald"),
+        "great",
+        ["Great Expectations"],
     ),
 ]
 
 
-def test(archer_1, archer_2, rounds, expected_result, expected_err):
+def test(
+    library_name,
+    book_titles,
+    book_authors,
+    book_to_remove,
+    search_query,
+    expected_search_results,
+):
     print("---------------------------------")
-    archer_1.print_status()
-    archer_2.print_status()
-
     try:
-        for _ in range(rounds):
-            archer_1.shoot(archer_2)
-            archer_2.print_status()
-            archer_2.shoot(archer_1)
-            archer_1.print_status()
-        archer_2.print_status()
+        print(f"Testing Library: {library_name}")
 
-        if expected_err:
-            print(f"\nExpected Exception: {expected_err}")
-            print("Actual: no exception raised")
+        library = Library(library_name)
+        for title, author in zip(book_titles, book_authors):
+            library.add_book(Book(title, author))
+            print(f"Adding book {title} by {author}")
+
+        print(f"Removing book {book_to_remove.title} by {book_to_remove.author}")
+        library.remove_book(book_to_remove)
+
+        print(f"Searching for '{search_query}'")
+        search_results = library.search_books(search_query)
+        results_titles = [book.title for book in search_results]
+        print(f"Expected: {expected_search_results}")
+        print(f"Actual: {results_titles}")
+
+        if results_titles != expected_search_results:
             print("Fail")
             return False
 
-        status_1 = archer_1.get_status()
-        status_2 = archer_2.get_status()
-        print(f"\nExpected Result: {expected_result[0]}, {expected_result[1]}")
-        print(f"Actual Result: {status_1}, {status_2}")
-
-        if status_1 == expected_result[0] and status_2 == expected_result[1]:
-            print("Pass")
-            return True
-        else:
-            print("Fail")
-            return False
+        print("Pass")
+        return True
     except Exception as e:
-        print(f"\nExpected Exception: {expected_err}")
-        print(f"Actual Exception: {str(e)}")
-        if str(e) == expected_err:
-            print("Pass")
-            return True
-        else:
-            print("Fail")
-            return False
+        print(f"Error: {e}")
+        return False
 
 
 def main():
-    passed = 0
-    failed = 0
+    passed, failed = 0, 0
     for test_case in test_cases:
         correct = test(*test_case)
         if correct:
             passed += 1
         else:
             failed += 1
+
     if failed == 0:
         print("============= PASS ==============")
     else:

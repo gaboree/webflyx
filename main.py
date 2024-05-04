@@ -1,28 +1,32 @@
-class Archer:
-    def __init__(self, name, health, num_arrows):
+class Book:
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+    
+    def print_book(self):
+        print(f"{self.title} written by {self.author}")
+
+class Library:
+    def __init__(self, name):
         self.name = name
-        self.health = health
-        self.num_arrows = num_arrows
+        self.books = []
 
-    def get_shot(self):
-        if self.health > 1:
-            self.health -= 1
-        else:
-            self.health -= 1
-            raise Exception(f"{self.name} is dead")
+    def add_book(self, book):
+        self.books.append(book)
 
-    def shoot(self, target):
-        if self.num_arrows > 0:
-            self.num_arrows -=1
-            print(f"{self.name} shoots {target.name}")
-            target.get_shot()
-        else:
-            raise Exception(f"{self.name} can't shoot")
+    def remove_book(self, book):
+        for i in self.books:
+            if i.author == book.author and i.title == book.title:                
+                self.books.remove(i)
+    
+    def search_books(self, search_string):
+        result = []
+        target = search_string.lower()
+        for i in self.books:
+            if target in i.author.lower() or target in i.title.lower():
+                result.append(i)
+        return result
 
-    # don't touch below this line
-
-    def get_status(self):
-        return self.name, self.health, self.num_arrows
-
-    def print_status(self):
-        print(f"{self.name} has {self.health} health and {self.num_arrows} arrows")
+    def print_library(self):
+        for i in self.books:
+            print(f"{i.author} {i.title}")
