@@ -1,73 +1,33 @@
-class Human:
-    def __init__(self, name):
-        self.__name = name
+class Unit:
+    def __init__(self, name, pos_x, pos_y):
+        self.name = name
+        self.pos_x = pos_x
+        self.pos_y = pos_y
 
-    def get_name(self):
-        return self.__name
+    def in_area(self, x_1, y_1, x_2, y_2):
+        is_x = False
+        is_y = False
+        if x_1 <= self.pos_x <= x_2:
+            is_x = True
+        if y_1 <= self.pos_y <= y_2:
+            is_y = True
+        return is_x and is_y
 
+class Dragon(Unit):
+    def __init__(self, name, pos_x, pos_y, fire_range):
+        super().__init__(name, pos_x, pos_y)
+        self.__fire_range = fire_range
 
-## don't touch above this line
+    def breathe_fire(self, x, y, units):
+        #define AoE of dragon breath
+        d_x1 = x - self.__fire_range
+        d_y1 = y - self.__fire_range
+        d_x2 = x + self.__fire_range
+        d_y2 = y + self.__fire_range
+        # Check if any unit is in within that AoE
+        damaged_units = []       
+        for unit in units:
+            if (d_x1 <= unit.pos_x <= d_x2) and (d_y1 <= unit.pos_y <= d_y2):
+                damaged_units.append(unit)
+        return damaged_units
 
-
-class Archer(Human):
-    def __init__(self, name, health, num_arrows):
-        super().__init__(name)
-        self.__num_arrows = num_arrows
-        self.__health = health
-
-    def get_num_arrows(self):
-        return self.__num_arrows
-    
-    def get_name(self):
-        return super().get_name()
-    
-    def get_health(self):
-        return self.__health
-
-    def shoot(self, target):
-        if self.__num_arrows > 0:
-            self.__num_arrows -= 1
-            target.take_damage(10)
-        else:
-            raise Exception("not enough arrows")
-    
-    def take_damage(self, damage):
-        self.__health -= damage
-
-
-
-class Crossbowman(Archer):
-    def __init__(self, name, num_arrows):
-        super().__init__(name, num_arrows)
-
-    def triple_shot(self, target):
-        if self.get_num_arrows() >= 3:
-            self.use_arrows(3)
-            return f"{target.get_name()} was shot by 3 crossbow bolts"
-        else:
-            raise Exception("not enough arrows")
-
-class Wizard(Human):
-    def __init__(self, name, health, mana):
-        super().__init__(name)
-        self.__health = health
-        self.__mana = mana
-    
-    def get_name(self):
-        return super().get_name()
-    
-    def get_health(self):
-        return self.__health
-
-    def get_mana(self):
-        return self.__mana
-    
-    def take_damage(self, damage):
-        self.__health -= damage
-
-    def cast(self, target):
-        if self.get_mana() >= 25:
-            target.take_damage(25)
-            self.__mana -= 25
-        else:
-            raise Exception("not enough mana")
