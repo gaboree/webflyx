@@ -27,7 +27,8 @@ class Dragon(Unit):
         # Check if any unit is in within that AoE
         damaged_units = []       
         for unit in units:
-            if (d_x1 <= unit.pos_x <= d_x2) and (d_y1 <= unit.pos_y <= d_y2):
+            in_area = unit.in_area(d_x1, d_y1, d_x2, d_y2)
+            if in_area:    
                 damaged_units.append(unit)
         return damaged_units
 
