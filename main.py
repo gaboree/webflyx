@@ -16,7 +16,11 @@ class Hero:
 class Archer(Hero):
     def __init__(self, name, health, num_arrows):
         super().__init__(name, health)
-        # ?
+        self.__num_arrows = num_arrows
 
     def shoot(self, target):
-        pass
+        if self.__num_arrows > 0:
+            self.__num_arrows -= 1
+            target.take_damage(10)
+        else:
+            raise Exception("not enough arrows")
