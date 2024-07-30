@@ -1,3 +1,29 @@
+def main():
+    dragons = [
+        Dragon("Green Dragon", 0, 0, 1),
+        Dragon("Red Dragon", 2, 2, 2),
+        Dragon("Blue Dragon", 4, 3, 3),
+        Dragon("Black Dragon", 5, -1, 4),
+    ]
+
+    # don't touch above this line
+
+    for dragon in dragons:
+        describe(dragon)
+
+    for dragon in dragons:
+        dragons_copy = dragons.copy()
+        i = dragons.index(dragon) 
+        del dragons_copy[i]
+        dragon.breathe_fire(3,3,dragons_copy)
+
+# don't touch below this line
+
+
+def describe(dragon):
+    print(f"{dragon.name} is at {dragon.pos_x}/{dragon.pos_y}")
+
+
 class Unit:
     def __init__(self, name, pos_x, pos_y):
         self.name = name
@@ -5,13 +31,13 @@ class Unit:
         self.pos_y = pos_y
 
     def in_area(self, x_1, y_1, x_2, y_2):
-        is_x = False
-        is_y = False
-        if x_1 <= self.pos_x <= x_2:
-            is_x = True
-        if y_1 <= self.pos_y <= y_2:
-            is_y = True
-        return is_x and is_y
+        return (
+            self.pos_x >= x_1
+            and self.pos_x <= x_2
+            and self.pos_y >= y_1
+            and self.pos_y <= y_2
+        )
+
 
 class Dragon(Unit):
     def __init__(self, name, pos_x, pos_y, fire_range):
@@ -19,16 +45,16 @@ class Dragon(Unit):
         self.__fire_range = fire_range
 
     def breathe_fire(self, x, y, units):
-        #define AoE of dragon breath
-        d_x1 = x - self.__fire_range
-        d_y1 = y - self.__fire_range
-        d_x2 = x + self.__fire_range
-        d_y2 = y + self.__fire_range
-        # Check if any unit is in within that AoE
-        damaged_units = []       
+        print(f"{self.name} breathes fire at {x}/{y} with range {self.__fire_range}")
+        print("====================================")
         for unit in units:
-            in_area = unit.in_area(d_x1, d_y1, d_x2, d_y2)
-            if in_area:    
-                damaged_units.append(unit)
-        return damaged_units
+            in_area = unit.in_area(
+                x - self.__fire_range,
+                y - self.__fire_range,
+                x + self.__fire_range,
+                y + self.__fire_range,
+            )
+            if in_area:
+                print(f"{unit.name} is hit by the fire")
 
+main()
