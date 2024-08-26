@@ -7,16 +7,32 @@ RANKS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", 
 
 class Card:
     def __init__(self, rank, suit):
-        pass
+        self.rank = rank
+        self.suit = suit
+        self.rank_index = RANKS.index(rank)
+        self.suit_index = SUITS.index(suit)
 
     def __eq__(self, other):
-        pass
+        if self.rank == other.rank and self.suit == other.suit:
+            return True
+        else:
+            return False
 
     def __lt__(self, other):
-        pass
-
+        if self.rank_index < other.rank_index:
+            return True
+        elif self.rank_index == other.rank_index and self.suit_index < other.suit_index:
+            return True
+        else:
+            return False
+        
     def __gt__(self, other):
-        pass
+        if self.rank_index > other.rank_index:
+            return True
+        elif self.rank_index == other.rank_index and self.suit_index > other.suit_index:
+            return True
+        else:
+            return False
 
     # don't touch below this line
 
