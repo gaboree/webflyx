@@ -1,36 +1,51 @@
 from main import *
 
+SUITS = ["Clubs", "Diamonds", "Hearts", "Spades"]
+
+RANKS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"]
+
 run_cases = [
-    (Dragon("Green Dragon", -1, -2, 1, 2, 1), -2, -3, 0, 0, True),
-    (Dragon("Red Dragon", 2, 2, 2, 2, 2), 0, 1, 1, 0, True),
-    (Dragon("Blue Dragon", 4, -3, 2, 1, 1), -5, -5, 5, 5, True),
-    (Dragon("Silver Dragon", 0, 0, 5, 5, 10), 4, 0, 5, 1, False),
+    ("Ace", "Hearts", "Queen", "Hearts", False, True),
+    ("2", "Spades", "2", "Hearts", False, True),
 ]
 
 submit_cases = run_cases + [
-    (Dragon("Green Dragon", -1, -2, 1, 2, 1), -3, -3, -1, -1, True),
-    (Dragon("Red Dragon", 2, 2, 2, 2, 2), 5, 5, 10, 10, False),
-    (Dragon("Blue Dragon", 4, -3, 2, 1, 1), 0, 0, 10, 10, False),
-    (Dragon("Black Dragon", 5, -1, 3, 2, 2), -10, -10, 10, 10, True),
-    (Dragon("White Dragon", 0, 0, 1, 1, 1), -1, -1, 1, 1, True),
+    ("Ace", "Spades", "Ace", "Spades", True, False),
+    ("3", "Diamonds", "7", "Clubs", False, False),
+    ("King", "Clubs", "King", "Hearts", False, False),
+    ("Queen", "Diamonds", "Jack", "Spades", False, True),
+    ("10", "Hearts", "10", "Hearts", True, False),
 ]
 
 
-def test(dragon, input1, input2, input3, input4, expected_output):
+def test(rank_1, suit_1, rank_2, suit_2, expected_eq, expected_gt):
     print("---------------------------------")
-    print(f"Inputs:")
-    print(
-        f" * Dragon position and size: {dragon.pos_x}, {dragon.pos_y}, {dragon.height}, {dragon.width}"
-    )
-    print(f" * Area corners: ({input1}, {input2}), ({input3}, {input4})")
-    print(f"Expected in area: {expected_output}")
-    result = dragon.in_area(input1, input2, input3, input4)
-    print(f"  Actual in area: {result}")
-    if result == expected_output:
-        print("Pass")
-        return True
-    print("Fail")
-    return False
+    print(f"Inputs: {rank_1} of {suit_1}, {rank_2} of {suit_2}")
+    print("Expected:")
+    print(f" * Equal: {expected_eq}")
+    print(f" * Greater than: {expected_gt}")
+    print(f" * Less than: {not (expected_eq or expected_gt)}")
+
+    card_1 = Card(rank_1, suit_1)
+    card_2 = Card(rank_2, suit_2)
+    result_eq = card_1 == card_2
+    result_gt = card_1 > card_2
+    result_lt = card_1 < card_2
+    print("Actual:")
+    print(f" * Equal: {result_eq}")
+    if result_eq != expected_eq:
+        print("Fail")
+        return False
+    print(f" * Greater than: {result_gt}")
+    if result_gt != expected_gt:
+        print("Fail")
+        return False
+    print(f" * Less than: {result_lt}")
+    if result_lt == (expected_eq or expected_gt or None):
+        print("Fail")
+        return False
+    print("Pass")
+    return True
 
 
 def main():
